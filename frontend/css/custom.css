@@ -1,0 +1,26 @@
+div.hero-main
+{
+    margin-top: 80px;
+    height: 400px;
+}
+
+p.  vert-middle
+{
+    vertical-align: middle;
+}
+
+button.btn-go
+{
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+input.long-input
+{
+    width: 300px;
+}
+
+p.block-form
+{
+    display: block;
+}
