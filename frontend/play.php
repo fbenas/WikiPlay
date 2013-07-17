@@ -46,8 +46,8 @@
 <div class="container">
 
     <div class="hero-unit hero-main block-form">
-    	<ol>
-    		<li class="visited">Starting here: <?php echo $start->get_heading(); ?></li>
+    	<ol id="list">
+    		<li>Starting here: <?php echo $start->get_heading(); ?></li>
     	</ol>
     	<div class="choices">
     	<?php
@@ -70,16 +70,26 @@
     	function dosome(id)
     	{
     		var next = $('#'+id).text();
-    		var url = $('#hidden'+id + ' a').prop('href').replace('localhost:8000','en.wikipedia.org');
-    		$('<li class="visited">' + next + '</li>').insertAfter($('.visited').last());
-    		$('.choices').remove();
+    		var url ="http://en.wikipedia.org"+ $('#hidden'+id + ' a').attr('href');
+            $("#list").append("<li>" + next + "</li>");
+    		$('.choices').empty();
+
+            // Display loading
+             $(".choices").append("<p class='loading''>Loading...</p>");
+
     		// Now ajax call to get the next list of links.
     		$.post("../backend/getLinks.php", 
     		"url=" + url,
             function(data){
-               alert(data[0]);
-                
-        	}, "json");
+                // remove loading
+                $(".choices").empty();
+                for (var i = 0; i < data.length; i++)
+                {
+    			   $('.choices').append("<p id='hidden"+ i + "' hidden>" + data[i] + "</p>");
+    			   $('.choices').append("<p><a onClick='dosome(" + i + ")' id='"+ i + "'>" + $(data[i]).text() + "</a></p>");
+                }
+        	},
+            "json");
     	}
     </script>
 </body>
