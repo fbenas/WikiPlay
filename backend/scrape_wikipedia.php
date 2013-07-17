@@ -57,7 +57,7 @@ class scrape_wikipedia
             return "Could not find heading.";
         }
 
-        $this->heading = $element[0]->innertext;
+        $this->heading =  strip_tags( $element[0]->innertext );
 
         // Get the description (first paragraph)
         $element = $this->html->find($this::FIRST_PARAGRAPH_CONST);
@@ -77,7 +77,7 @@ class scrape_wikipedia
         // check the link exists.
         if(count($this->links) <= $this->link_no)
         {
-            return "No more links.";
+            return "";
         }
         else
         {
@@ -106,13 +106,23 @@ class scrape_wikipedia
         }
     }
 
+    public function get_link_count()
+    {
+        return $this->link_no;
+    }
+
+    public function get_links()
+    {
+        return $this->links;
+    }
+    
     private function load_links()
     {
         // set the $link_no pointer to 0.
         $this->link_no = 0;
         // Remove all the <sup> elements (subscripts)"
         $count = count($this->html->find($this::FIRST_PARAGRAPH_CONST)[0]->find("sup"));
-        
+
         for( $i = 0; $i<$count; $i++)
         {
             $element = $this->html->find($this::FIRST_PARAGRAPH_CONST)[0]->find("sup")[$i];
@@ -125,6 +135,7 @@ class scrape_wikipedia
 
         // get all the links in the first paragraph.
         $this->links = $this->html->find($this::FIRST_PARAGRAPH_CONST)[0]->find("a");
+        $this->link_no = count($this->html->find($this::FIRST_PARAGRAPH_CONST)[0]->find("a"));
     }
 
     // Reload the html page into the vars

@@ -1,13 +1,10 @@
 <?php 
 
-//  include "../backend/scrape_wikipedia.php";
-//  $randomWikiURL = scrape_wikipedia::get_random_article()->get_heading();
-//  echo json_encode($randomWikiURL);
+  include "../backend/scrape_wikipedia.php";
+  $page = scrape_wikipedia::get_random_article();
+  $heading = $page->get_heading();
+  $url = $page->get_url();
+  $return_array = array('heading'=>$heading, 'url'=>$url);
+  echo json_encode($return_array);
 
-$bar = $_POST['bar'];
-
-$.post('/form.php', serializedData, function(response) {
-    // log the response to the console
-    console.log("Response: " . "response");
-});
 ?>

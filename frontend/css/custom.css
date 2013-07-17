@@ -4,7 +4,7 @@ div.hero-main
     height: 400px;
 }
 
-p.  vert-middle
+p.vert-middle
 {
     vertical-align: middle;
 }
@@ -18,9 +18,4 @@ button.btn-go
 input.long-input
 {
     width: 300px;
-}
-
-p.block-form
-{
-    display: block;
 }

@@ -10,6 +10,19 @@
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 
 <body>
+
+<?php 
+
+    include "../backend/scrape_wikipedia.php";
+    if(!isset($_POST["start_url"]) || !isset($_POST["finish_url"]))
+    {
+    	header("Location: index.php");
+    }
+    $start = new scrape_wikipedia($_POST["start_url"]);
+    $finish = new scrape_wikipedia($_POST["finish_url"]);
+
+?>
+
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -33,51 +46,41 @@
 <div class="container">
 
     <div class="hero-unit hero-main block-form">
+    	<ol>
+    		<li class="visited">Starting here: <?php echo $start->get_heading(); ?></li>
+    	</ol>
+    	<div class="choices">
+    	<?php
+    		for($i=0; $i < $start->get_link_count(); $i++)
+    		{
+    			echo "<p><a onClick='dosome($i)' id='$i'>" . strip_tags ($start->get_link($i)) . "</a></p>";
+    			echo "<p id='hidden$i' hidden>" . $start->get_link($i) . "</p>";
+    			$link = $start->get_next_link();
+    		}
+    	 ?>
+    	</div>
+		<p>Finishing here: <?php echo $finish->get_heading(); ?></p>
+	</div>
 
-        <h1>WikiPlay</h1>
-        <p>Navigate from one random article to another, just through links in the first paragraph!</p>
-        
-
-        <form class="navbar-form pull-left" id="searchForm" action="play.php" method="post">
-            <p>
-               	<input type="text" value="" class="span2 long-input" id="start" readonly>
-                <input type="hidden" name="start_url" value="" id="starturl">
-				<button type="button" onClick="dosome('start')" class="badge" id="random2">randomize</button>
-            </p>
-            <p class="vert-middle"> to </p>
-            <p>
-                <input type="text" value="" class="span2 long-input" id="finish" readonly>
-                <input type="hidden" name="finish_url" value="" id="finishurl">
-                <button type="button" class="badge" onClick="dosome('finish')" id="random2" >randomize</button>
-            </p>
-            <p><button type="submit" class="btn btn-primary btn-large btn-go">Go</button></p>
-        </form>
-    </div>
 </div>
       <!-- Placed at the end of the document so the pages load faster -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    // Handler for .ready() called.
-    dosome("start");
-    dosome("finish");
-});
-
-    function dosome(name)
-    {
-        $('#' + name).val("loading...");
-        $.post("../backend/ajaxRandom.php", 
-            function(data){
-                $('#' + name).val(data["heading"]);
-                $('#' + name + "url").val(data["url"]);
-                
-        }, "json");
-        
-        
-    }
-
-    </script>
     <!--===================================================-->
+    <script>
+    	function dosome(id)
+    	{
+    		var next = $('#'+id).text();
+    		var url = $('#hidden'+id + ' a').prop('href').replace('localhost:8000','en.wikipedia.org');
+    		$('<li class="visited">' + next + '</li>').insertAfter($('.visited').last());
+    		$('.choices').remove();
+    		// Now ajax call to get the next list of links.
+    		$.post("../backend/getLinks.php", 
+    		"url=" + url,
+            function(data){
+               alert(data[0]);
+                
+        	}, "json");
+    	}
+    </script>
 </body>
 </html>
