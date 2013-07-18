@@ -67,7 +67,7 @@ class scrape_wikipedia
             return "Could not find description";
         }
 
-        $this->desc = $element[0]->innertext;
+        $this->desc = $element[$this->para]->innertext;
     }
 
     // Get's the next link from the description
@@ -133,9 +133,22 @@ class scrape_wikipedia
             $this->html->load($this->html->save());  
         }
 
-        // get all the links in the first paragraph.
-        $this->links = $this->html->find($this::FIRST_PARAGRAPH_CONST)[0]->find("a");
-        $this->link_no = count($this->html->find($this::FIRST_PARAGRAPH_CONST)[0]->find("a"));
+        // Remove first table
+        $element = $this->html->find('div #mw-content-text table')[$i];
+        if($element)
+        {
+            $element->innertext = '';
+        }
+        $this->html->load($this->html->save());  
+
+        $i = 0;
+        while ( count($this->html->find($this::FIRST_PARAGRAPH_CONST)[$i]->find("a")) == 0 || count($this->html->find($this::FIRST_PARAGRAPH_CONST)[$i]->find("ul")) != 0)
+        {
+            $i++;
+        }
+        $this->links = $this->html->find($this::FIRST_PARAGRAPH_CONST)[$i]->find("a");
+        $this->para = $i;
+        $this->link_no = count($this->html->find($this::FIRST_PARAGRAPH_CONST)[$i]->find("a"));
     }
 
     // Reload the html page into the vars
