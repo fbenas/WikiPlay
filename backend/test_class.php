@@ -2,15 +2,17 @@
     include_once('scrape_wikipedia.php');
 
     // testing the backend.
-    $random = new scrape_wikipedia("http://en.wikipedia.org/wiki/Computer_networks");
-    echo $random->get_heading() . "\n";
+    $page = scrape_wikipedia::get_random_article();
+	while($page->get_description() == '' || $page->get_link_count() == 0)
+	{
+		$page = scrape_wikipedia::get_random_article();
+	}
+	//$page = new scrape_wikipedia("http://en.wikipedia.org/wiki/Mackellar");
 
-    echo $random->get_description() . "\n";
-    //echo $random->get_url() ."\n";
-
-    for($i=0; $i<$random->get_link_count(); $i++)
+    for($i=0; $i<$page->get_link_count(); $i++)
     {
-    	echo $random->get_link($i) . "\n";
+    	echo $page->get_link($i) . "\n";
     }
 
 ?>
+    

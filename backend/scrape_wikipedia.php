@@ -16,6 +16,7 @@ class scrape_wikipedia
     private $heading;
     private $link_no;
     private $links;
+    private $para;
 
     const FIRST_PARAGRAPH_CONST = "div #mw-content-text p";
     const HEADING_CONST = "#firstHeading span";
@@ -66,8 +67,14 @@ class scrape_wikipedia
         {
             return "Could not find description";
         }
-
-        $this->desc = $element[$this->para]->innertext;
+        if($this->para = 0)
+        {
+            $this->desc ='';
+        }
+        else
+        {
+            $this->desc = $element[$this->para]->innertext;
+        }
     }
 
     // Get's the next link from the description
@@ -95,14 +102,10 @@ class scrape_wikipedia
 
     // Get the link at the provided index
     public function get_link($index)
-    {
-        if($index < count($this->links))
+    {   
+        if($index < sizeof($this->links))
         {
-            return $this->links[$index]->outertext;
-        }
-        else
-        {
-            return "No Link Found.";
+            return $this->links[$index];
         }
     }
 
@@ -120,35 +123,67 @@ class scrape_wikipedia
     {
         // set the $link_no pointer to 0.
         $this->link_no = 0;
-        // Remove all the <sup> elements (subscripts)"
-        $count = count($this->html->find($this::FIRST_PARAGRAPH_CONST)[0]->find("sup"));
 
-        for( $i = 0; $i<$count; $i++)
+        // Remove first table 
+        // bug #1 on github.
+        if(isset($this->html->find('div #mw-content-text table')[0]))
         {
-            $element = $this->html->find($this::FIRST_PARAGRAPH_CONST)[0]->find("sup")[$i];
-            if($element)
-            {
-                $element->innertext = '';
-            }
-            $this->html->load($this->html->save());  
-        }
-
-        // Remove first table
-        $element = $this->html->find('div #mw-content-text table')[$i];
-        if($element)
-        {
+            $element = $this->html->find('div #mw-content-text table')[0];
             $element->innertext = '';
         }
         $this->html->load($this->html->save());  
 
-        $i = 0;
-        while ( count($this->html->find($this::FIRST_PARAGRAPH_CONST)[$i]->find("a")) == 0 || count($this->html->find($this::FIRST_PARAGRAPH_CONST)[$i]->find("ul")) != 0)
+        // Remove coords
+        if($this->html->find('#coordinates'))
         {
-            $i++;
+            $this->html->find('#coordinates')[0]->innertext = '';  
         }
-        $this->links = $this->html->find($this::FIRST_PARAGRAPH_CONST)[$i]->find("a");
-        $this->para = $i;
-        $this->link_no = count($this->html->find($this::FIRST_PARAGRAPH_CONST)[$i]->find("a"));
+        $this->html->load($this->html->save()); 
+        
+        $this->para = 0;
+        $fail = false;
+        while (    !$this->html->find($this::FIRST_PARAGRAPH_CONST)
+                || !isset($this->html->find($this::FIRST_PARAGRAPH_CONST)[$this->para])
+                || count($this->html->find($this::FIRST_PARAGRAPH_CONST)[$this->para]->find("a")) == 0 
+                || count($this->html->find($this::FIRST_PARAGRAPH_CONST)[$this->para]->find("ul")) != 0)
+        {
+            if($this->para > 5)
+            {
+                $fail = true;
+                break;
+            }
+            $this->para++;
+        }
+
+        if($fail == true)
+        {
+            $this->links = null;
+            $this->link_no = 0;
+        }
+        else
+        {
+            $this->links = $this->html->find($this::FIRST_PARAGRAPH_CONST)[$this->para]->find("a");
+            
+            $returnArray = array();
+            $arrayCount =0;
+            for($i=0; $i< count($this->links); $i++)
+            {
+                if(    !strstr($this->links[$i]->outertext,"IPA") 
+                    && !strstr($this->links[$i]->outertext,"<sup>")
+                    && !strstr($this->links[$i]->outertext,"#cite_note"))
+                {
+                    $returnArray[$arrayCount] = $this->links[$i]->outertext;
+                    $arrayCount++;
+                }
+                // limit to 10
+                if($arrayCount > 10)
+                {
+                    break;
+                }
+            }
+            $this->links = $returnArray;
+            $this->link_no = count($this->links);
+        }
     }
 
     // Reload the html page into the vars

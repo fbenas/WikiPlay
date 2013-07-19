@@ -88,6 +88,18 @@
     			   $('.choices').append("<p id='hidden"+ i + "' hidden>" + data[i] + "</p>");
     			   $('.choices').append("<p><a onClick='dosome(" + i + ")' id='"+ i + "'>" + $(data[i]).text() + "</a></p>");
                 }
+
+                // Check div size.
+                if($('p:last').position().top > 600)
+    			{
+    				$('div.hero-main').height($('p:last').position().top-100);
+    			}
+    			else
+    			{
+    				$('div.hero-main').height(400);
+    			}
+    			// scroll to bottom
+    			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
         	},
             "json");
     	}
