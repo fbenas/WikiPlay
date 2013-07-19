@@ -73,8 +73,6 @@ $(document).ready(function() {
                 $('#' + name + "url").val(data["url"]);
                 
         }, "json");
-        
-        
     }
 
     </script>

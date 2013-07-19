@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+<?php 
+	define ('SITE_ROOT', realpath(dirname(__FILE__)));
+	define ('SITE_URL',    'http://'.$_SERVER['HTTP_HOST']);
+
+	if(!isset($_POST["start_url"]) || !isset($_POST["finish_url"]) || $_POST["start_url"] == "" || $_POST["finish_url"] == "")
+	{
+		header("Location:index.php");
+	}
+
+    include "../backend/scrape_wikipedia.php";
+    $start = new scrape_wikipedia($_POST["start_url"]);
+    $finish = new scrape_wikipedia($_POST["finish_url"]);
+
+?>
     <title>WikiPlay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
@@ -10,18 +24,6 @@
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 
 <body>
-
-<?php 
-
-    include "../backend/scrape_wikipedia.php";
-    if(!isset($_POST["start_url"]) || !isset($_POST["finish_url"]))
-    {
-    	header("Location: index.php");
-    }
-    $start = new scrape_wikipedia($_POST["start_url"]);
-    $finish = new scrape_wikipedia($_POST["finish_url"]);
-
-?>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
