@@ -170,7 +170,8 @@ class scrape_wikipedia
             {
                 if(    !strstr($this->links[$i]->outertext,"IPA") 
                     && !strstr($this->links[$i]->outertext,"<sup>")
-                    && !strstr($this->links[$i]->outertext,"#cite_note"))
+                    && !strstr($this->links[$i]->outertext,"#cite_note")
+                    && !strstr($this->links[$i]->outertext,'href="//en.wiktionary.org'))
                 {
                     $returnArray[$arrayCount] = $this->links[$i]->outertext;
                     $arrayCount++;
