@@ -6,7 +6,7 @@
     session_start(); 
     if(isset($_SESSION['error']))
     {
-        $error = $_SESSION['error'];
+        $error = $_SESSION['error'] . " (click to remove)";
         unset($_SESSION['error']);
     }
 ?>
@@ -41,7 +41,7 @@
 </div>
 </div>
 <div class="container">
-    <p class="error"><?php echo $error; ?></p>
+    <p class="error" onClick="removeError()"><?php echo $error; ?></p>
     <div class="hero-unit hero-main block-form">
 
         <h1>WikiPlay</h1>
@@ -85,6 +85,10 @@ $(document).ready(function() {
         }, "json");
     }
 
+    function removeError()
+    {
+        $("p.error").empty();
+    }
     </script>
     <!--===================================================-->
 </body>
