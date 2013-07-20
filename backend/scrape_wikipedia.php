@@ -176,12 +176,14 @@ class scrape_wikipedia
             
             $returnArray = array();
             $arrayCount =0;
+
             for($i=0; $i< count($this->links); $i++)
             {
                 if(    !strstr($this->links[$i]->outertext,"IPA") 
                     && !strstr($this->links[$i]->outertext,"<sup>")
                     && !strstr($this->links[$i]->outertext,"#cite_note")
                     && !strstr($this->links[$i]->outertext,'href="//en.wiktionary.org')
+                    && !strstr($this->links[$i]->outertext,'href="//upload.wikimedia.org')
                     && !strstr($this->links[$i]->outertext,'disambiguation needed')
                     && !strstr($this->links[$i]->outertext,'citation needed')
                     && !strstr($this->links[$i]->outertext,'File:'))
@@ -195,6 +197,9 @@ class scrape_wikipedia
                     break;
                 }
             }
+            
+            //remvoe any duplicates
+            $returnArray = array_values(array_unique($returnArray));
             $this->links = $returnArray;
             $this->link_no = count($this->links);
         }
