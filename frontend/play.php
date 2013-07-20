@@ -7,12 +7,24 @@
 
 	if(!isset($_POST["start_url"]) || !isset($_POST["finish_url"]) || $_POST["start_url"] == "" || $_POST["finish_url"] == "")
 	{
-		header("Location:index.php");
+		session_start(); 
+    	$_SESSION['error'] = "No URLs found.";
+    	header("Location:index.php");
+		exit;
 	}
 
     include "../backend/scrape_wikipedia.php";
-    $start = new scrape_wikipedia($_POST["start_url"]);
-    $finish = new scrape_wikipedia($_POST["finish_url"]);
+    try {
+    	$start = new scrape_wikipedia($_POST["start_url"]);
+    	$finish = new scrape_wikipedia($_POST["finish_url"]);
+    }
+    catch ( Exception $e)
+    {
+    	session_start(); 
+    	$_SESSION['error'] = $e->getMessage();
+    	header("Location:index.php");
+    	exit;
+    }
 
 ?>
     <title>WikiPlay</title>

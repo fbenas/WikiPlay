@@ -25,9 +25,9 @@ class scrape_wikipedia
     {
         $this->url = $url;
         $error = $this->load_page();
-        if ($error != "")
+        if ($error != '')
         {
-            return $error; // Error code returned for external error reporting.
+            throw new Exception($error);
         }
     }
 
@@ -37,15 +37,20 @@ class scrape_wikipedia
     // Return empty string if no error.
     private function load_page()
     {
-        // TODO: Stop the simple_html_dom warnings. And handle it here.
-
         // Load the page into the $html var
         $this->html = new simple_html_dom();
+
+        // Check url for valid wiki page.
+        if(!strstr($this->url,"wikipedia.org/wiki"))
+        {
+            return "Not a valid link. ('". $this->url ."')";
+        }
+
         $this->html->load_file($this->url);
         
         if(is_null($this->html))
         {
-            return "Could not load the page.";
+            return "Could not load file. ('" . $this->url . "'')";
         }
         
         // load the first paragraph's links and initalise pointer.
@@ -55,7 +60,7 @@ class scrape_wikipedia
         $element = $this->html->find($this::HEADING_CONST);
         if(is_null($element))
         {
-            return "Could not find heading.";
+            return "Could not retrive page heading. ('". $this->url . "'')";
         }
 
         $this->heading =  strip_tags( $element[0]->innertext );
@@ -65,11 +70,12 @@ class scrape_wikipedia
 
         if(is_null($element))
         {
-            return "Could not find description";
+            return "Could not retrive page description. ('". $this->url . "')";
+
         }
         if($this->para = 0)
         {
-            $this->desc ='';
+            return "No valid description could be found. ('". $this->url . "')";
         }
         else
         {

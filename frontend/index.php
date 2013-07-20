@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+<?php
+    $error='';
+    session_start(); 
+    if(isset($_SESSION['error']))
+    {
+        $error = $_SESSION['error'];
+        unset($_SESSION['error']);
+    }
+?>
     <title>WikiPlay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
@@ -32,7 +41,7 @@
 </div>
 </div>
 <div class="container">
-
+    <p class="error"><?php echo $error; ?></p>
     <div class="hero-unit hero-main block-form">
 
         <h1>WikiPlay</h1>
