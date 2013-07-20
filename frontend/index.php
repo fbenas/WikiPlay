@@ -42,7 +42,7 @@
 </div>
 <div class="container">
     <p class="error" onClick="removeError()"><?php echo $error; ?></p>
-    <div class="hero-unit hero-main block-form">
+    <div class="hero-unit hero-main hero-index">
 
         <h1>WikiPlay</h1>
         <p>Navigate from one random article to another, just through links in the first paragraph!</p>
@@ -52,13 +52,13 @@
             <p>
                	<input type="text" value="" class="span2 long-input" id="start" readonly>
                 <input type="hidden" name="start_url" value="" id="starturl">
-				<button type="button" onClick="dosome('start')" class="badge">randomize</button>
+				<button type="button" onClick="getRandomLink('start')" class="badge">randomize</button>
             </p>
             <p class="vert-middle"> to </p>
             <p>
                 <input type="text" value="" class="span2 long-input" id="finish" readonly>
                 <input type="hidden" name="finish_url" value="" id="finishurl">
-                <button type="button" class="badge" onClick="dosome('finish')">randomize</button>
+                <button type="button" class="badge" onClick="getRandomLink('finish')">randomize</button>
             </p>
             <p><button type="submit" class="btn btn-primary btn-large btn-go">Go</button></p>
         </form>
@@ -70,11 +70,11 @@
 <script>
 $(document).ready(function() {
     // Handler for .ready() called.
-    dosome("start");
-    dosome("finish");
+    getRandomLink("start");
+    getRandomLink("finish");
 });
 
-    function dosome(name)
+    function getRandomLink(name)
     {
         $('#' + name).val("loading...");
         $.post("../backend/ajaxRandom.php", 

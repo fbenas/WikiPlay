@@ -5,18 +5,21 @@
 	define ('SITE_ROOT', realpath(dirname(__FILE__)));
 	define ('SITE_URL',    'http://'.$_SERVER['HTTP_HOST']);
 
-	if(!isset($_POST["start_url"]) || !isset($_POST["finish_url"]) || $_POST["start_url"] == "" || $_POST["finish_url"] == "")
-	{
-		session_start(); 
-    	$_SESSION['error'] = "No URLs found.";
-    	header("Location:index.php");
-		exit;
-	}
+    try 
+    {
+	    if(!isset($_POST["start_url"]) || !isset($_POST["finish_url"]) || $_POST["start_url"] == "" || $_POST["finish_url"] == "")
+		{
+			throw new Exception("No URLs found.");
+		}
 
-    include "../backend/scrape_wikipedia.php";
-    try {
+	    include "../backend/scrape_wikipedia.php";
+
     	$start = new scrape_wikipedia($_POST["start_url"]);
     	$finish = new scrape_wikipedia($_POST["finish_url"]);
+    	if( $start->get_link_count() < 1)
+    	{
+    		throw new Exception("No links found. ("  . $start->get_url() . ")");
+    	}
     }
     catch ( Exception $e)
     {
@@ -60,21 +63,15 @@
 </div>
 <div class="container">
 
-    <div class="hero-unit hero-main block-form">
+    <div class="hero-unit hero-main hero-play">
     	<ol id="list">
-    		<li>Starting here: <?php echo $start->get_heading(); ?></li>
     	</ol>
     	<div class="choices">
-    	<?php
-    		for($i=0; $i < $start->get_link_count(); $i++)
-    		{
-    			echo "<p><a onClick='dosome($i)' id='$i'>" . strip_tags ($start->get_link($i)) . "</a></p>";
-    			echo "<p id='hidden$i' hidden>" . $start->get_link($i) . "</p>";
-    			$link = $start->get_next_link();
-    		}
-    	 ?>
+    	<p id='hidden0' hidden><a href="<?php echo preg_replace('/(.+?)org/i',"",$start->get_url()); ?>"</a></p>
+    	<p><a onClick=getLinks(0) id="0"><?php echo $start->get_heading(); ?></a></p>
     	</div>
-		<p>Finishing here: <?php echo $finish->get_heading(); ?></p>
+		<p>Target: <?php echo $finish->get_heading(); ?></p>
+		<p class="desc"><?php echo $finish->get_description(); ?></p>
 	</div>
 
 </div>
@@ -82,10 +79,15 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <!--===================================================-->
     <script>
-    	function dosome(id)
+    	$(document).ready(function() {
+		    // Handler for .ready() called.
+		    getLinks(0);
+		});
+
+    	function getLinks(id)
     	{
     		var next = $('#'+id).text();
-    		var url ="http://en.wikipedia.org"+ $('#hidden'+id + ' a').attr('href');
+    		var url ="http://en.wikipedia.org"+ $('#hidden'+id + ' a').attr("href");
             $("#list").append("<li>" + next + "</li>");
     		$('.choices').empty();
 
@@ -98,21 +100,18 @@
             function(data){
                 // remove loading
                 $(".choices").empty();
+                if(data.length < 1)
+                {
+                	$('.choices').append("<p class='no-links'>No Links Found.</p>");
+                }
                 for (var i = 0; i < data.length; i++)
                 {
     			   $('.choices').append("<p id='hidden"+ i + "' hidden>" + data[i] + "</p>");
-    			   $('.choices').append("<p><a onClick='dosome(" + i + ")' id='"+ i + "'>" + $(data[i]).text() + "</a></p>");
+    			   $('.choices').append("<p><a onClick='getLinks(" + i + ")' id='"+ i + "'>" + $(data[i]).text() + "</a></p>");
                 }
-
-                // Check div size.
-                if($('p:last').position().top > 400)
-    			{
-    				$('div.hero-main').height($('p:last').position().top-100);
-    			}
-    			else
-    			{
-    				$('div.hero-main').height(400);
-    			}
+    			
+    			$('div.hero-play').height($('p:last').position().top-120);
+    	
     			// scroll to bottom
     			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
         	},

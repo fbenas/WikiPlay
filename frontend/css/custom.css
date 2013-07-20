@@ -3,10 +3,16 @@ p.loading
     color: red;
 }
 
-div.hero-main
+div.hero-index
 {
     margin-top: 30px;
-    height: 400px;
+    height: 200px;
+}
+
+div.hero-play
+{
+    margin-top: 100px;
+    height: 200px;
 }
 
 p.vert-middle
@@ -29,4 +35,16 @@ p.error
 {
 	color: red;
 	margin-top: 80px;
+}
+
+p.no-links
+{
+	color: red;
+}
+
+p.desc
+{
+	font-style: italic;
+	font-size: 14px;
+	line-height: 20px;
 }

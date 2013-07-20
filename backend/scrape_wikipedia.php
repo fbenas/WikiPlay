@@ -79,7 +79,7 @@ class scrape_wikipedia
         }
         else
         {
-            $this->desc = $element[$this->para]->innertext;
+            $this->desc = $element[$this->para]->plaintext;
         }
     }
 
@@ -90,7 +90,7 @@ class scrape_wikipedia
         // check the link exists.
         if(count($this->links) <= $this->link_no)
         {
-            return "";
+            throw new Exception("No links found. (" . $this->get_url() . ")");
         }
         else
         {
@@ -112,6 +112,10 @@ class scrape_wikipedia
         if($index < sizeof($this->links))
         {
             return $this->links[$index];
+        }
+        else
+        {
+            throw new Exception("Link not found. (" . $this->get_url . ")");
         }
     }
 
@@ -177,7 +181,8 @@ class scrape_wikipedia
                 if(    !strstr($this->links[$i]->outertext,"IPA") 
                     && !strstr($this->links[$i]->outertext,"<sup>")
                     && !strstr($this->links[$i]->outertext,"#cite_note")
-                    && !strstr($this->links[$i]->outertext,'href="//en.wiktionary.org'))
+                    && !strstr($this->links[$i]->outertext,'href="//en.wiktionary.org')
+                    && !strstr($this->links[$i]->outertext,'disambiguation needed'))
                 {
                     $returnArray[$arrayCount] = $this->links[$i]->outertext;
                     $arrayCount++;
