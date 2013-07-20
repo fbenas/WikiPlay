@@ -58,7 +58,7 @@ class scrape_wikipedia
 
         // Get the heading
         $element = $this->html->find($this::HEADING_CONST);
-        if(is_null($element))
+        if(sizeof($element) < 1)
         {
             return "Could not retrive page heading. ('". $this->url . "'')";
         }
