@@ -60,7 +60,7 @@ class scrape_wikipedia
         $element = $this->html->find($this::HEADING_CONST);
         if(sizeof($element) < 1)
         {
-            return "Could not retrive page heading. ('". $this->url . "'')";
+            return "Could not retrieve page heading. ('". $this->url . "'')";
         }
 
         $this->heading =  strip_tags( $element[0]->innertext );
@@ -70,7 +70,7 @@ class scrape_wikipedia
 
         if(is_null($element))
         {
-            return "Could not retrive page description. ('". $this->url . "')";
+            return "Could not retrieve page description. ('". $this->url . "')";
 
         }
         if($this->para = 0)
