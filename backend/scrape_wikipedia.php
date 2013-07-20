@@ -183,7 +183,8 @@ class scrape_wikipedia
                     && !strstr($this->links[$i]->outertext,"#cite_note")
                     && !strstr($this->links[$i]->outertext,'href="//en.wiktionary.org')
                     && !strstr($this->links[$i]->outertext,'disambiguation needed')
-                    && !strstr($this->links[$i]->outertext,'citation needed'))
+                    && !strstr($this->links[$i]->outertext,'citation needed')
+                    && !strstr($this->links[$i]->outertext,'File:'))
                 {
                     $returnArray[$arrayCount] = $this->links[$i]->outertext;
                     $arrayCount++;
