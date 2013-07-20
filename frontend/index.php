@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css"></link>
     <link rel="stylesheet" href="css/custom.css"></link>
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
