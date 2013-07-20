@@ -87,8 +87,15 @@
     	function getLinks(id)
     	{
     		var next = $('#'+id).text();
-    		var url ="http://en.wikipedia.org"+ $('#hidden'+id + ' a').attr("href");
-            $("#list").append("<li>" + next + "</li>");
+    		var url =$('#hidden'+id + ' a').attr("href");
+
+    		var re = new RegExp("[\s\S]*wikipedia.org[\s\S]*");
+    		if(!re.test(url))
+    		{
+    			url = "http://en.wikipedia.org" + url;
+    		}
+    		var visited = $("#list li").size();
+            $("#list").append("<li><a id='A" + visited + "' onClick=backup(" + visited + ") >" + next + "</a><p id='Ahidden" + visited + "' hidden>" + url + "</p></li>");
     		$('.choices').empty();
 
             // Display loading
@@ -110,13 +117,39 @@
     			   $('.choices').append("<p><a onClick='getLinks(" + i + ")' id='"+ i + "'>" + $(data[i]).text() + "</a></p>");
                 }
     			
-    			$('div.hero-play').height($('p:last').position().top-120);
+    			$('div.hero-play').height($('p:last').position().top-100);
     	
     			// scroll to bottom
     			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
         	},
             "json");
     	}
+
+    	function backup(id)
+    	{
+    		$('.choices').empty();
+ 			
+ 			// Get the name and url of the clicked link
+ 			var name = $("#A" + id).text();
+ 			var url = $("#Ahidden" + id).text();
+
+            // Remove all list items after id.
+            var size = $('#list li').size();
+            for(i=id; i< size +1; i++)
+            {
+            	$('#A' + i).parent().remove();
+            }
+
+            // get the new size
+            size = $('#list li').size();
+            $('.choices').append("<p id='hidden" + size + "'><a href='" + url + "' hidden></a></p>");
+    		$('.choices').append("<p><a onClick=getLinks(" + size + ") id='" + size + "'>" + name + "</a></p>");
+    		
+    		getLinks(id);
+
+    	}
     </script>
+
+
 </body>
 </html>
