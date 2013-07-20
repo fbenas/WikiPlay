@@ -20,8 +20,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css"></link>
-    <link rel="stylesheet" href="css/custom.css"></link>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css" />
+    <link rel="stylesheet" href="css/custom.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 
 <body>
@@ -93,7 +93,7 @@
                 }
 
                 // Check div size.
-                if($('p:last').position().top > 600)
+                if($('p:last').position().top > 400)
     			{
     				$('div.hero-main').height($('p:last').position().top-100);
     			}

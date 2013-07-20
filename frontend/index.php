@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css"></link>
-    <link rel="stylesheet" href="css/custom.css"></link>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css" />
+    <link rel="stylesheet" href="css/custom.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -43,13 +43,13 @@
             <p>
                	<input type="text" value="" class="span2 long-input" id="start" readonly>
                 <input type="hidden" name="start_url" value="" id="starturl">
-				<button type="button" onClick="dosome('start')" class="badge" id="random2">randomize</button>
+				<button type="button" onClick="dosome('start')" class="badge">randomize</button>
             </p>
             <p class="vert-middle"> to </p>
             <p>
                 <input type="text" value="" class="span2 long-input" id="finish" readonly>
                 <input type="hidden" name="finish_url" value="" id="finishurl">
-                <button type="button" class="badge" onClick="dosome('finish')" id="random2" >randomize</button>
+                <button type="button" class="badge" onClick="dosome('finish')">randomize</button>
             </p>
             <p><button type="submit" class="btn btn-primary btn-large btn-go">Go</button></p>
         </form>
