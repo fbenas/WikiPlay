@@ -62,7 +62,9 @@
 </div>
 </div>
 <div class="container">
-
+	<h1 class="play"><?php echo $start->get_heading(); ?></h1>
+	<p>to</p>
+	<h1><?php echo $finish->get_heading(); ?></h1>
     <div class="hero-unit hero-main hero-play">
     	<ol id="list">
     	</ol>
