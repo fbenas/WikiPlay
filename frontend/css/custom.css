@@ -48,3 +48,10 @@ p.desc
 	font-size: 14px;
 	line-height: 20px;
 }
+
+img.loadgif
+{
+	height: 20px;
+	width: 20px;
+
+}

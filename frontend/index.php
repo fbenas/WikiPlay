@@ -49,16 +49,16 @@
         
 
         <form class="navbar-form pull-left" id="searchForm" action="play.php" method="post">
-            <p>
+            <p id="startp">
                	<input type="text" value="" class="span2 long-input" id="start" readonly>
                 <input type="hidden" name="start_url" value="" id="starturl">
-				<button type="button" onClick="getRandomLink('start')" class="badge">randomize</button>
+				<button type="button" id="startbtn" onClick="getRandomLink('start')" class="badge">randomize</button>
             </p>
             <p class="vert-middle"> to </p>
-            <p>
+            <p id="finishp">
                 <input type="text" value="" class="span2 long-input" id="finish" readonly>
                 <input type="hidden" name="finish_url" value="" id="finishurl">
-                <button type="button" class="badge" onClick="getRandomLink('finish')">randomize</button>
+                <button type="button" id="finishbtn" class="badge" onClick="getRandomLink('finish')">randomize</button>
             </p>
             <p><button type="submit" class="btn btn-primary btn-large btn-go">Go</button></p>
         </form>
@@ -77,10 +77,14 @@ $(document).ready(function() {
     function getRandomLink(name)
     {
         $('#' + name).val("loading...");
+        $('#' + name + "btn").hide();
+        $('#' + name + 'p').append("<img id='" + name + "gif' class='loadgif' src='http://www.oenovaults.com/images/loading.gif'/>");
         $.post("../backend/ajaxRandom.php", 
             function(data){
                 $('#' + name).val(data["heading"]);
                 $('#' + name + "url").val(data["url"]);
+                $('#' + name + "btn").show();
+                $('#' + name + 'gif').remove();
                 
         }, "json");
     }

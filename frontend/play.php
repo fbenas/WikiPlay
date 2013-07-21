@@ -99,7 +99,7 @@
     		$('.choices').empty();
 
             // Display loading
-             $(".choices").append("<p class='loading''>Loading...</p>");
+             $(".choices").append("<img id='" + name + "gif' class='loadgif' src='http://www.oenovaults.com/images/loading.gif'/>");
 
     		// Now ajax call to get the next list of links.
     		$.post("../backend/getLinks.php", 
@@ -120,7 +120,9 @@
     			$('div.hero-play').height($('p:last').position().top-100);
     	
     			// scroll to bottom
-    			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+    			$("html, body").animate({ 
+    				scrollTop: $('#list li:last').offset().top - 40
+    			}, "slow");
         	},
             "json");
     	}
